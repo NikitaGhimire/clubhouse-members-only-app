@@ -1,6 +1,3 @@
---Drop table if they exist
-DROP TABLE IF EXISTS messages;
-DROP TABLE IF EXISTS users;
 
 --Create the users table
 CREATE TABLE users(
