@@ -1,39 +1,54 @@
-const passport = require("passport");
+// config/passport-config.js
 const LocalStrategy = require("passport-local").Strategy;
-const { getUserByEmail, getUserById } = require("../db/queries");
 const bcrypt = require("bcrypt");
+const pool = require("../db/pool"); // Adjust path to your db pool
 
-//configure passport-local startegy
-passport.use(
-  new LocalStrategy(async (email, password, done) => {
+function initialize(passport) {
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email",
+        passwordField: "password",
+      },
+      async (email, password, done) => {
+        try {
+          const result = await pool.query(
+            "SELECT * FROM users WHERE email = $1",
+            [email]
+          );
+          const user = result.rows[0];
+          if (!user) {
+            return done(null, false, { message: "No user with that email" });
+          }
+
+          const match = await bcrypt.compare(password, user.password);
+          if (match) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: "Password incorrect" });
+          }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
     try {
-      const user = await getUserByEmail(email);
-      if (!user) {
-        return done(null, false, { message: "No user with that email." });
-      }
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (isMatch) {
-        return done(null, user);
-      } else {
-        return done(null, false, { message: "Incorrect password" });
-      }
+      const result = await pool.query("SELECT * FROM users WHERE id = $1", [
+        id,
+      ]);
+      const user = result.rows[0];
+      done(null, user);
     } catch (error) {
-      return done(error);
+      done(error);
     }
-  })
-);
+  });
+}
 
-//serialise user
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-// Deserialize user
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await getUserById(id);
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
-});
+module.exports = initialize;

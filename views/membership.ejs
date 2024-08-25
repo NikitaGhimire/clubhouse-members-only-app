@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Membership Passcode</title>
+</head>
+<body>
+    <h1>Enter Membership Passcode</h1>
+    <% if (errorMessage) { %>
+        <p style="color: red;"><%= errorMessage %></p>
+    <% } %>
+    <form action="/membership" method="POST">
+        <label for="passcode">Passcode:</label>
+        <input type="password" name="passcode" id="passcode" required>
+        <button type="submit">Join the Club</button>
+    </form>
+</body>
+</html>

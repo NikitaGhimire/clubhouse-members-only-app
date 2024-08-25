@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   renderSignUpPage,
   handleSignUp,
-} = require("../controllers/authControllers");
+} = require("../controllers/authController");
 
 //get sign-up form
 router.get("/signup", renderSignUpPage);
