@@ -47,8 +47,8 @@ app.get("/", (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong!");
+  console.error("Error:", err.message); // Log the error message
+  res.status(500).send(`Something went wrong! Error: ${err.message}`);
 });
 
 // Start the server
