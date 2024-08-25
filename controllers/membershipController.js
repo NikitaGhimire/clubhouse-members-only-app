@@ -9,7 +9,7 @@ const renderMembershipPage = (req, res) => {
 //handle the membership form submission
 const handleMembership = async (req, res) => {
   const { passcode } = req.body;
-  const secretPasscode = process.env.SECRET_PASSCODE;
+  const secretPasscode = process.env.SESSION_SECRET;
 
   if (passcode === secretPasscode) {
     try {
