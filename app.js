@@ -1,6 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
+const authRoutes = require("./routes/auth");
+const loginRoutes = require("./routes/loginRoutes");
+require("dotenv").config();
+const passportConfig = require("./config/passport"); // Passport configuration
 
 const app = express();
 
@@ -14,6 +18,10 @@ app.use(passport.session());
 
 // Set up view engine
 app.set("view engine", "ejs");
+
+// Routes
+app.use("/", authRoutes);
+app.use("/", loginRoutes);
 
 // Define a basic route
 app.get("/", (req, res) => {
