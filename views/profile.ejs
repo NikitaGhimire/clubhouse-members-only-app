@@ -11,6 +11,10 @@
     <p>Membership status: <%= user.membership_status ? 'Member' : 'Non-member' %></p>
     <p>Admin status: <%= user.admin ? 'Admin' : 'Regular User' %></p>
     <a href="/membership">Update Membership Status</a>
+    <% if (user.membership_status) { %>
+        <a href="/messages/new">Create a New Message</a>
+    <% } %>
     <a href="/logout">Logout</a>
+    <a href="/messages"> Back to your messages </a>
 </body>
 </html>

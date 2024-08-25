@@ -7,6 +7,8 @@ const authRoutes = require("./routes/auth");
 const loginRoutes = require("./routes/loginRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const messageRoutes = require("./routes/messageRoutes");
+const indexRoutes = require("./routes/indexRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -28,10 +30,12 @@ app.use(passport.session());
 app.set("view engine", "ejs");
 
 // Routes
+app.use("/", indexRoutes);
 app.use("/", authRoutes);
 app.use("/", loginRoutes);
 app.use("/", membershipRoutes); // membership routes
 app.use("/", profileRoutes); //profile routes
+app.use("/", messageRoutes);
 
 // Define a basic route
 app.get("/", (req, res) => {

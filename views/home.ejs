@@ -1,0 +1,27 @@
+<!-- views/home.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>All Messages</h1>
+    <% if (user) { %>
+        <a href="/profile"> View your Profile </a>
+        <a href="/messages/new">Create a New Message</a>
+    <% } %>
+    <ul>
+        <% messages.forEach(message => { %>
+            <li>
+                <strong><%= message.title %></strong>
+                <p><%= message.text %></p>
+                <% if (user && user.membership_status) { %>
+                    <p><small>By <%= message.user_id %> at <%= message.timestamp %></small></p>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
