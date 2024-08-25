@@ -12,13 +12,23 @@ const getUserByEmail = async (email) => {
   return res.rows[0];
 };
 
-//create a new user
-const createUser = async (first_name, last_name, email, password) => {
-  const res = await pool.query(
-    "INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *",
-    [first_name, last_name, email, password]
-  );
-  return res.rows[0];
+// Create a new user
+const createUser = async (
+  first_name,
+  last_name,
+  email,
+  hashedPassword,
+  admin
+) => {
+  try {
+    await pool.query(
+      "INSERT INTO users (first_name, last_name, email, password, admin) VALUES ($1, $2, $3, $4, $5)",
+      [first_name, last_name, email, hashedPassword, admin]
+    );
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
 };
 
 //get all messages

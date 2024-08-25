@@ -8,7 +8,8 @@ const renderSignUpPage = (req, res) => {
 
 //handle sign-up form submission
 const handleSignUp = async (req, res) => {
-  const { first_name, last_name, email, password, confirmPassword } = req.body;
+  const { first_name, last_name, email, password, confirmPassword, admin } =
+    req.body;
 
   //Validate form data
   if (!first_name || !last_name || !email || !password || !confirmPassword) {
@@ -31,7 +32,13 @@ const handleSignUp = async (req, res) => {
 
   //create new user
   try {
-    await createUser(first_name, last_name, email, hashedPassword);
+    await createUser(
+      first_name,
+      last_name,
+      email,
+      hashedPassword,
+      admin === "on"
+    ); // Admin field is a boolean
     //redirect to login page
     res.redirect("/login");
   } catch (error) {

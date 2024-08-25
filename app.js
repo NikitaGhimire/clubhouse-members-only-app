@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const methodOverride = require("method-override");
 
 const passport = require("passport");
 const initializePassport = require("./config/passport");
@@ -18,13 +19,15 @@ initializePassport(passport);
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "defaultSecretKey",
+    secret: process.env.SESSION_SECRET || "1234",
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride("_method"));
 
 // Set up view engine
 app.set("view engine", "ejs");

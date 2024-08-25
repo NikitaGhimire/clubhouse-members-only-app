@@ -13,6 +13,7 @@ const handleLogin = (req, res, next) => {
     if (!user) return res.render("login", { errorMessage: info.message });
     req.logIn(user, (err) => {
       if (err) return next(err);
+      console.log("User logged in:", user);
       res.redirect("/messages"); // Redirect to a protected route after login
     });
   })(req, res, next);

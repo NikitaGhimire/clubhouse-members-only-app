@@ -6,6 +6,7 @@ const {
   renderNewMessagePage,
   handleNewMessage,
   displayMessages,
+  handleDeleteMessage,
 } = require("../controllers/messageController");
 
 // GET new message page
@@ -16,5 +17,8 @@ router.post("/messages/new", ensureAuthenticated, handleNewMessage);
 
 // GET home page (to display messages)
 router.get("/messages", displayMessages);
+
+// DELETE message
+router.post("/messages/:id/delete", ensureAuthenticated, handleDeleteMessage);
 
 module.exports = router;

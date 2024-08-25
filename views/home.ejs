@@ -18,7 +18,13 @@
                 <strong><%= message.title %></strong>
                 <p><%= message.text %></p>
                 <% if (user && user.membership_status) { %>
-                    <p><small>By <%= message.user_id %> at <%= message.timestamp %></small></p>
+                    <p><small><%= message.first_name %> <%= message.last_name %> at <%= message.timestamp %></small></p>
+                <% } %>
+                <% if (user && user.admin) { %>
+                    <form action="/messages/<%= message.id %>/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit">Delete</button>
+                    </form>
                 <% } %>
             </li>
         <% }) %>

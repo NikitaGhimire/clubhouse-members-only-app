@@ -29,7 +29,10 @@ const handleNewMessage = async (req, res) => {
 const displayMessages = async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM messages ORDER BY timestamp DESC"
+      `SELECT m.id, m.title, m.text, m.timestamp, u.first_name, u.last_name
+         FROM messages m
+         JOIN users u ON m.user_id = u.id
+         ORDER BY m.timestamp DESC`
     );
     const messages = result.rows;
     res.render("home", { messages, user: req.user });
@@ -38,5 +41,30 @@ const displayMessages = async (req, res) => {
     res.status(500).send("An error occurred.");
   }
 };
+// Handle message deletion
+const handleDeleteMessage = async (req, res) => {
+  const messageId = req.params.id;
+  // Log user information to debug
+  console.log("User:", req.user); // Check if `req.user.admin` is set correctly
 
-module.exports = { renderNewMessagePage, handleNewMessage, displayMessages };
+  if (!req.user.admin) {
+    return res.status(403).send("Access denied.");
+  }
+
+  console.log(`Deleting message with ID: ${messageId}`); // Add this line
+
+  try {
+    await pool.query("DELETE FROM messages WHERE id = $1", [messageId]);
+    res.redirect("/messages");
+  } catch (err) {
+    console.error("Error deleting message:", err);
+    res.status(500).send("An error occurred.");
+  }
+};
+
+module.exports = {
+  renderNewMessagePage,
+  handleNewMessage,
+  displayMessages,
+  handleDeleteMessage,
+};
